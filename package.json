@@ -1,0 +1,52 @@
+{
+  "name": "@panoptic/quickbooks-client",
+  "version": "0.1.0",
+  "description": "QuickBooks Online API client with OAuth 2.0, rate limiting, and typed entities",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "lint": "biome check src",
+    "format": "biome format --write src",
+    "prepublishOnly": "npm run build"
+  },
+  "keywords": [
+    "quickbooks",
+    "intuit",
+    "oauth",
+    "accounting",
+    "api",
+    "client"
+  ],
+  "author": "Panoptic Technology Ltd",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/panoptic-it-solutions/quickbooks-client"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "@biomejs/biome": "^2.3.11",
+    "@types/node": "^20",
+    "tsup": "^8.0.0",
+    "typescript": "^5",
+    "vitest": "^2.0.0"
+  }
+}
