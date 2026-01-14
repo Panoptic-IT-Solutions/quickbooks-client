@@ -1,18 +1,18 @@
-# @panoptic/quickbooks-client
+# @panoptic-it-solutions/quickbooks-client
 
 QuickBooks Online API client with OAuth 2.0, rate limiting, and typed entities.
 
 ## Installation
 
 ```bash
-npm install @panoptic/quickbooks-client
+npm install @panoptic-it-solutions/quickbooks-client
 ```
 
 ## Quick Start
 
 ```typescript
-import { QuickBooksClient, generateAuthUrl, exchangeCodeForTokens, generateState } from '@panoptic/quickbooks-client';
-import type { TokenStore, QuickBooksTokens } from '@panoptic/quickbooks-client';
+import { QuickBooksClient, generateAuthUrl, exchangeCodeForTokens, generateState } from '@panoptic-it-solutions/quickbooks-client';
+import type { TokenStore, QuickBooksTokens } from '@panoptic-it-solutions/quickbooks-client';
 
 // 1. Implement TokenStore for your storage backend
 const tokenStore: TokenStore = {
@@ -157,7 +157,7 @@ interface QuickBooksTokens {
 ## Error Handling
 
 ```typescript
-import { QuickBooksError, QB_ERROR_CODES } from '@panoptic/quickbooks-client';
+import { QuickBooksError, QB_ERROR_CODES } from '@panoptic-it-solutions/quickbooks-client';
 
 try {
   await client.getInvoices();
