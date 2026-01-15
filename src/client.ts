@@ -212,9 +212,6 @@ export class QuickBooksClient {
    * Execute a query using QuickBooks Query Language
    */
   async query<T>(sql: string): Promise<T[]> {
-    const response = await this.request<QueryResponse<T>>("POST", "/query", undefined);
-
-    // For query, we need to use the special query endpoint
     const tokens = await this.getValidTokens();
     const env = this.config.environment || "production";
     const baseUrl = API_BASE[env];
@@ -246,6 +243,65 @@ export class QuickBooksClient {
     const entityKey = keys[0];
 
     return entityKey ? (data.QueryResponse[entityKey] as T[]) : [];
+  }
+
+  /**
+   * Execute a query with automatic pagination to fetch all results
+   * @param sql - Base SQL query (without STARTPOSITION/MAXRESULTS)
+   * @param pageSize - Number of results per page (default 1000, max 1000)
+   */
+  async queryAll<T>(sql: string, pageSize = 1000): Promise<T[]> {
+    const allResults: T[] = [];
+    let startPosition = 1;
+    const maxResults = Math.min(pageSize, 1000);
+
+    while (true) {
+      const paginatedSql = `${sql} STARTPOSITION ${startPosition} MAXRESULTS ${maxResults}`;
+
+      const tokens = await this.getValidTokens();
+      const env = this.config.environment || "production";
+      const baseUrl = API_BASE[env];
+      const url = `${baseUrl}/v3/company/${tokens.realm_id}/query`;
+
+      await this.checkRateLimit();
+
+      const fetchResponse = await fetch(url, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${tokens.access_token}`,
+          Accept: "application/json",
+          "Content-Type": "application/text",
+        },
+        body: paginatedSql,
+      });
+
+      if (!fetchResponse.ok) {
+        const errorData = await fetchResponse.json().catch(() => ({})) as Record<string, unknown>;
+        throw handleQuickBooksError({ status: fetchResponse.status, ...errorData });
+      }
+
+      const data = (await fetchResponse.json()) as QueryResponse<T>;
+
+      // Extract the entity array from QueryResponse
+      const keys = Object.keys(data.QueryResponse).filter(
+        (k) => !["startPosition", "maxResults", "totalCount"].includes(k)
+      );
+      const entityKey = keys[0];
+      const pageResults = entityKey ? (data.QueryResponse[entityKey] as T[]) : [];
+
+      allResults.push(...pageResults);
+
+      this.log("debug", `Fetched page at position ${startPosition}, got ${pageResults.length} results (total: ${allResults.length})`);
+
+      // If we got fewer results than requested, we've reached the end
+      if (pageResults.length < maxResults) {
+        break;
+      }
+
+      startPosition += maxResults;
+    }
+
+    return allResults;
   }
 
   // ============================================
