@@ -6,46 +6,68 @@
 
 // Main client
 export { QuickBooksClient } from "./client.js";
-
-// OAuth utilities
-export {
-  generateAuthUrl,
-  exchangeCodeForTokens,
-  refreshTokens,
-  revokeTokens,
-  calculateTokenExpiry,
-  isTokenExpired,
-  generateState,
-} from "./oauth.js";
+export type { QuickBooksErrorCode } from "./errors.js";
 
 // Errors
-export { QuickBooksError, QB_ERROR_CODES, handleQuickBooksError } from "./errors.js";
-export type { QuickBooksErrorCode } from "./errors.js";
+export {
+	handleQuickBooksError,
+	QB_ERROR_CODES,
+	QuickBooksError,
+} from "./errors.js";
+// OAuth utilities
+export {
+	calculateTokenExpiry,
+	exchangeCodeForTokens,
+	generateAuthUrl,
+	generateState,
+	isTokenExpired,
+	refreshTokens,
+	revokeTokens,
+} from "./oauth.js";
 
 // Types
 export type {
-  // Config & Options
-  QuickBooksConfig,
-  QuickBooksClientOptions,
-  QuickBooksTokens,
-  TokenStore,
-  OAuthTokenResponse,
-
-  // API Types
-  QueryResponse,
-  QuickBooksApiError,
-
-  // Entities
-  BaseEntity,
-  Invoice,
-  InvoiceLine,
-  Customer,
-  Address,
-  Payment,
-  PaymentLine,
-  Account,
-  Vendor,
-  Bill,
-  BillLine,
-  Item,
+	Account,
+	Address,
+	Attachable,
+	AttachableRef,
+	BaseEntity,
+	// Batch
+	BatchItemRequest,
+	BatchItemResponse,
+	BatchResponse,
+	Bill,
+	BillLine,
+	BillPayment,
+	BillPaymentLine,
+	CompanyInfo,
+	CreditMemo,
+	CreditMemoLine,
+	Customer,
+	// Entities
+	Invoice,
+	InvoiceLine,
+	Item,
+	OAuthTokenResponse,
+	Payment,
+	PaymentLine,
+	// API Types
+	QueryResponse,
+	QuickBooksApiError,
+	QuickBooksClientOptions,
+	// Config & Options
+	QuickBooksConfig,
+	QuickBooksTokens,
+	// Common
+	Ref,
+	// Tax
+	TaxCode,
+	TaxLine,
+	TaxRate,
+	TaxRateDetail,
+	TokenStore,
+	TxnTaxDetail,
+	Vendor,
+	VendorCredit,
+	VendorCreditLine,
 } from "./types.js";
